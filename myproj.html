@@ -18,9 +18,7 @@
 				.append("g");
 			var projection=d3.geo.mercator().center([-140,66]).scale(900)
 			
-			var drag= d3.behavior.drag()
-			.origin(Object)
-			.on("drag",dragon);	
+				
 			
 			var path= d3.geo.path().projection(projection);
 			
@@ -30,7 +28,6 @@
 				.attr("fill","steelblue")
 				.style('stroke', 'white')
 				.style('stroke-width', 1)
-				.call(drag)
 				.on("mouseover", function(){d3.select(this).style("fill", "cyan");})
 				.on("mouseout", function(){d3.select(this).style("fill", "steelblue");})
 				.on("click", function(d) { alert(d.properties.NAME+" Population: "+d.properties.USPOP+" per sq. miles");});
@@ -41,10 +38,7 @@
 				.attr("text-anchor","middle")
 				.text(function(d){ return d.properties.NAME;});
 				
-			function dragon(d){
-			d3.select(this)
-				.attr("cx", d.x=d3.event.x)
-				.attr("cy", d.y=d3.event.y);
+			
 		}
 				
 			
