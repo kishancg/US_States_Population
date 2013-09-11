@@ -1,11 +1,21 @@
 <!doctype html>
 <html>
 <head>
-	<title>D3 tutorial</title>
+	<title>US States Population</title>
 	<script src="http://d3js.org/d3.v3.min.js"></script>
-	<style type="text/css"></style>
 </head>
 <body>
+<p align="center"><font size="24">US States Population</font>
+				<br>
+				<font size="4">SCALE: per sq. miles </font>
+				<button style="background-color:steelblue">0 to 20</button>
+				<button style="background-color:blue">21 to 50</button>
+				<button style="background-color:green">51 to 100</button>
+				<button style="background-color:red">101 to 150</button>
+				<button style="background-color:yellow">151 to 200</button>
+				<button style="background-color:grey">201 to 500</button>
+				<button style="background-color:limegreen">501 to 1000</button>
+				<button style="background-color:orange">more than 1000</button></p>
 	<script>
 		var canvas=d3.select("body").append("svg")
 			.attr("width",1700)
@@ -17,22 +27,35 @@
 				.enter()
 				.append("g");
 			var projection=d3.geo.mercator().center([-140,66]).scale(900)
-			
-			var drag= d3.behavior.drag()
-			.origin(Object)
-			.on("drag",dragon);	
+
 			
 			var path= d3.geo.path().projection(projection);
+			
 			
 			var areas=group.append("path")
 				.attr("d",path)
 				.attr("class","area")
-				.attr("fill","steelblue")
+				.attr("fill",function(d){if (d.properties.USPOP <= 20) {return "steelblue"}
+										if (d.properties.USPOP <= 50) {return "blue"}							 													
+										if (d.properties.USPOP <= 100) {return "green"}
+										if (d.properties.USPOP <= 150) {return "red"}
+										if (d.properties.USPOP <= 200) {return "yellow"}
+										if (d.properties.USPOP <= 500) {return "grey"}
+			 							if (d.properties.USPOP <= 1000) {return "limegreen"}
+            							else    { return "orange" }
+            					;})
 				.style('stroke', 'white')
 				.style('stroke-width', 1)
-				.call(drag)
 				.on("mouseover", function(){d3.select(this).style("fill", "cyan");})
-				.on("mouseout", function(){d3.select(this).style("fill", "steelblue");})
+				.on("mouseout", function(){d3.select(this).style("fill", function(d){if (d.properties.USPOP <= 20) {return "steelblue"}
+										 											if (d.properties.USPOP <= 50) {return "blue"}
+										 											if (d.properties.USPOP <= 100) {return "green"}
+										 											if (d.properties.USPOP <= 150) {return "red"}
+										 											if (d.properties.USPOP <= 200) {return "yellow"}
+										 											if (d.properties.USPOP <= 500) {return "grey"}
+										 											if (d.properties.USPOP <= 1000) {return "limegreen"}
+            																		else    { return "orange" };})
+            								;})
 				.on("click", function(d) { alert(d.properties.NAME+" Population: "+d.properties.USPOP+" per sq. miles");});
 
 			group.append("text")
@@ -41,13 +64,6 @@
 				.attr("text-anchor","middle")
 				.text(function(d){ return d.properties.NAME;});
 				
-			function dragon(d){
-			d3.select(this)
-				.attr("cx", d.x=d3.event.x)
-				.attr("cy", d.y=d3.event.y);
-		}
-				
-			
 		});
 		
 	</script>
